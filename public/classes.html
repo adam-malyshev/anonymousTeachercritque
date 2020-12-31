@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>Anonymous Teacher Critiquer</title>
+    </head>
+    <body>
+        <h1>Your Classes</h1>
+        <a href="/classes/joinclass">Join a Class</a>
+        <a href="/classes/createclass">Create a Class</a>
+
+        <a href="/logout">Log Out</a>
+
+        <h3>Teacher of:</h3>
+        <div id="classesListTeacher">
+        </div>
+        <h3>Student of:</h3>
+        <div id="classesListStudent">
+        </div>
+        <script type="text/javascript">
+
+            function genList(arr){
+                var out = "<ul>";
+                for(const obj of arr){
+                    out += "<li> <a href ='/class?classId=" + obj._id + "'>" + obj.name + "</a> <p>Code:"+ obj._id.toString() +"</p></li>";
+                }
+                out += "</ul>";
+                return out;
+            }
+
+            function getTeacherClasses(){
+                const xhr = new XMLHttpRequest();
+
+                xhr.onreadystatechange = function() {
+                    if(xhr.readyState == 4){
+                        const classes = JSON.parse(xhr.responseText);
+                        document.getElementById('classesListTeacher').innerHTML = genList(classes);
+                    }
+                }
+                xhr.open('GET', '/classes/getTeacherClasses');
+                xhr.send();
+            }
+            getTeacherClasses();
+
+            function getStudentClasses(){
+                const xhr = new XMLHttpRequest();
+
+                xhr.onreadystatechange = function() {
+                    if(xhr.readyState == 4){
+                        const classes = JSON.parse(xhr.responseText);
+                        document.getElementById('classesListStudent').innerHTML = genList(classes);
+                    }
+                }
+                xhr.open('GET', '/classes/getStudentClasses');
+                xhr.send();
+            }
+            getStudentClasses();
+        </script>
+    </body>
+</html>

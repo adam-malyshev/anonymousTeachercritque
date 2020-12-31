@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>Anonymous Teacher Critiquer</title>
+    </head>
+    <body>
+        <h1>Posts:</h1>
+        <a href="/logout">Log Out</a>
+        <a href="/classes"> Go Back</a>
+        <br>
+
+        <div id="createPost">
+            <button onclick="createPostForm();">Create Post</button>
+        </div>
+        <br>
+        <div id="posts">
+        </div>
+
+
+        <script type="text/javascript">
+            const queryString = window.location.search;
+            console.log(queryString);
+            const urlParams = new URLSearchParams(queryString);
+            const classId = urlParams.get('classId');
+            function genList(arr){
+                var out = "<ul>";
+                for(const obj of arr){
+                    var currdate = new Date();
+                    currdate.getTime();
+                    var date = new Date();
+                    date.setTime(obj.time);
+                    out += "<li><div class='posts'>";
+                    out += "<p>" + obj.message + "</p> <span>";
+
+                    if(date.toDateString() == currdate.toDateString()){
+                        out += "<p>"+date.toLocaleTimeString() +"</p></div>";
+                    }else{
+                        out += "<p>"+date.toDateString() +"</p>";
+                    }
+
+                    
+
+                    out+="</div></li>";
+                }
+                out += "</ul>";
+                return out;
+            }
+            function createPostForm(){
+                var form = "";
+                form += "<form action='/class/posts?classId=" + classId + "' method= 'post'>";
+                form += "<label for='message'> Message: </label>";
+                form += "<input class='text' type='text' name='message'/>";
+                form += "<input class='button' type='submit' value='Post'/>";
+                form += "</form>";
+                document.getElementById('createPost').innerHTML = form;
+            }
+
+            function getPosts(){
+
+                const xhr = new XMLHttpRequest();
+
+                xhr.onreadystatechange = function(){
+                    if(xhr.readyState == 4){
+                        const posts = JSON.parse(xhr.responseText);
+                        document.getElementById('posts').innerHTML = genList(posts);
+                        console.log(posts);
+                    }
+                }
+                xhr.open('GET', '/class/posts?classId='+ classId);
+                xhr.send();
+            }
+            getPosts();
+
+
+        </script>
+    </body>
+</html>
