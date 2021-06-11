@@ -14,7 +14,7 @@ const options = {
 
 const classesRoutes = require('./routes/classes');
 const classRoutes = require('./routes/class');
-const uri = 'mongodb+srv://Admin:5X2ajiyCuCbcPYcC@cluster0.na0di.mongodb.net/CoolDb?retryWrites=true&w=majority';
+const uri = 'mongodb+srv://Admin:'+ process.env.MONGO_ATLAS_PW +'@cluster0.na0di.mongodb.net/'+ process.env.MONGO_DB_NAME +'?retryWrites=true&w=majority';
 mongoose.connect(
     uri,
 	{ useUnifiedTopology: true, useNewUrlParser: true }
